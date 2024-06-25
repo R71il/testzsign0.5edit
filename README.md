@@ -163,7 +163,7 @@ options:
 #### Original Codebase: https://github.com/zhlynn/zsign
 Copyright (c) 2021, zhlynn
 All rights reserved.
-@zhlynn https://github.com/zhlynn/zsign
+@zhlynn https://github.com/zhlynn
 
 #### PRs
 
