@@ -89,9 +89,9 @@ else
         cmake -DCMAKE_OSX_ARCHITECTURES=x86_64 ..
         make
         elif [[ "$OSTYPE" =~ ^$MacOs && "$arch" == "arm64" ]]; then
-        echo Building for macOS arm64
-        mkdir -p build
-        g++ *.cpp SourceFiles/*.cpp -lcrypto -I/opt/homebrew/Cellar/openssl@3/3.2.1/include -L/opt/homebrew/Cellar/openssl@3/3.2.1/lib -O3 -o build/zsign
+            echo Building for macOS arm64
+            mkdir -p build
+            g++ *.cpp SourceFiles/*.cpp -lcrypto -I/opt/homebrew/Cellar/openssl@3/3.2.1/include -L/opt/homebrew/Cellar/openssl@3/3.2.1/lib -O3 -o build/zsign
     else
         mkdir -p build && cd build
         echo Building for Linux $arch
