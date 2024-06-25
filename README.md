@@ -1,4 +1,5 @@
 # zsign
+#### cross-platform codesigning utility to sign .ipa or .app bundles, can also inject dyllibs into apps :)
 Modified version of zsign, originally created by zhlynn.
 
 ## How to build
