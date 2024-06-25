@@ -3,6 +3,36 @@ Modified version of zsign, originally created by zhlynn.
 
 ## How to build
 
+## Linux
+
+Fetch the repo, and cd into the directory.
+
+in `common/common.h` uncomment line 8 (Make sure line 7 is still commented out.)
+
+```bash
+chmod +x ./build.sh
+sudo ./build.sh
+```
+
+## MacOS
+
+Fetch the repo, and cd into the directory.
+
+in `common/common.h` uncomment line 8 (Make sure line 7 is still commented out.)
+
+and then:
+```bash
+chmod +x ./build.sh
+sudo ./build.sh
+```
+
+If you are running macOS on arm64 (Apple M-Series CPUs) you can compile a x86_64 binary for macOS by using the `--arch` cli flag. It accepts `arm64` & `x86_64`
+
+```bash
+sudo ./build.sh --arch x86_64
+```
+
+
 ## Windows 
 (This will compile a binary for windows, but you still have to compile it on Linux.)
 
@@ -61,33 +91,4 @@ sudo cp dirent.h /usr/share/mingw-w64/include
 # From inside the zsign/ directory
 sudo chmod +x ./build.sh
 sudo ./build.sh --win
-```
-
-## Linux
-
-Fetch the repo, and cd into the directory.
-
-in `common/common.h` uncomment line 8 (Make sure line 7 is still commented out.)
-
-```bash
-chmod +x ./build.sh
-sudo ./build.sh
-```
-
-## MacOS
-
-Fetch the repo, and cd into the directory.
-
-in `common/common.h` uncomment line 8 (Make sure line 7 is still commented out.)
-
-and then:
-```bash
-chmod +x ./build.sh
-sudo ./build.sh
-```
-
-If you are running macOS on arm64 (Apple M-Series CPUs) you can compile a x86_64 binary for macOS by using the `--arch` cli flag. It accepts `arm64` & `x86_64`
-
-```bash
-sudo ./build.sh --arch x86_64
 ```
