@@ -18,6 +18,7 @@ sudo apt-get install mingw-w64 git make
 git clone https://github.com/openssl/openssl.git
 git clone https://github.com/witwall/mman-win32.git
 git clone https://github.com/tronkko/dirent
+git clone https://github.com/selenic-io/zsign
 ```
 
 #### Compile mman-win32
@@ -63,6 +64,9 @@ sudo ./build_win.sh
 ```
 
 ## Linux
+
+Fetch the repo, and cd into the directory.
+
 in `common/common.h` uncomment line 8 (Make sure line 7 is still commented out.)
 
 ```bash
@@ -72,11 +76,7 @@ sudo ./build.sh
 
 ## MacOS
 
-Install openssl if you haven't already.
-
-```bash
-brew install openssl
-```
+Fetch the repo, and cd into the directory.
 
 in `common/common.h` uncomment line 8 (Make sure line 7 is still commented out.)
 
