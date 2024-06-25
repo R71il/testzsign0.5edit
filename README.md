@@ -59,8 +59,8 @@ sudo cp dirent.h /usr/share/mingw-w64/include
 
 ```bash
 # From inside the zsign/ directory
-sudo chmod +x ./build_win.sh
-sudo ./build_win.sh
+sudo chmod +x ./build.sh
+sudo ./build.sh --win
 ```
 
 ## Linux
@@ -86,8 +86,8 @@ chmod +x ./build.sh
 sudo ./build.sh
 ```
 
-If you are running macOS on arm64 (Apple M-Series CPUs) you can compile a x86_64 binary for macOS by using putting `arch -x86_64` in front of the command that executes build.sh.
+If you are running macOS on arm64 (Apple M-Series CPUs) you can compile a x86_64 binary for macOS by using the `--arch` cli flag. It accepts `arm64` & `x86_64`
 
 ```bash
-arch -x86_64 sudo ./build.sh
+sudo ./build.sh --arch x86_64
 ```
