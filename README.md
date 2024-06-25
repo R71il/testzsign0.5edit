@@ -3,6 +3,7 @@
 Modified version of zsign, originally created by zhlynn.
 
 ## How to build
+Follow the given instructions to compile it for your target OS.
 
 ## Linux
 
