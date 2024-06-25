@@ -1,9 +1,9 @@
-#include "common/common.h"
-#include "common/json.h"
+#include "HeaderFiles/common.h"
+#include "HeaderFiles/json.h"
 
-#include "openssl.h"
-#include "macho.h"
-#include "bundle.h"
+#include "HeaderFiles/openssl.h"
+#include "HeaderFiles/macho.h"
+#include "HeaderFiles/bundle.h"
 #include <libgen.h>
 #include <dirent.h>
 #include <getopt.h>

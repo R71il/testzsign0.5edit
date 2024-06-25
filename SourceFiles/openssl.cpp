@@ -1,6 +1,6 @@
-#include "common/common.h"
-#include "common/base64.h"
-#include "openssl.h"
+#include "../HeaderFiles/common.h"
+#include "../HeaderFiles/base64.h"
+#include "../HeaderFiles/openssl.h"
 
 #include <openssl/pem.h>
 #include <openssl/cms.h>

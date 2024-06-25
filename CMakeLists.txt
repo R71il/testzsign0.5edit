@@ -36,7 +36,7 @@ list(APPEND LIB_LIST ${ZLIB_LIBRARIES})
 
 # Main sources
 
-file(GLOB SRC common/*.cpp ./**.cpp)
+file(GLOB SRC SourceFiles/*.cpp ./**.cpp)
 
 add_executable(zsign ${SRC})
 target_link_libraries(zsign ${LIB_LIST})

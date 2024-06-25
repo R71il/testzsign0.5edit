@@ -1,9 +1,9 @@
-#include "bundle.h"
-#include "macho.h"
+#include "../HeaderFiles/bundle.h"
+#include "../HeaderFiles/macho.h"
 #include "sys/stat.h"
 #include "sys/types.h"
-#include "common/base64.h"
-#include "common/common.h"
+#include "../HeaderFiles/base64.h"
+#include "../HeaderFiles/common.h"
 
 ZAppBundle::ZAppBundle()
 {

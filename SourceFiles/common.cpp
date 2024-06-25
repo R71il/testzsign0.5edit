@@ -1,5 +1,5 @@
-#include "common.h"
-#include "base64.h"
+#include "../HeaderFiles/common.h"
+#include "../HeaderFiles/base64.h"
 #include <cinttypes>
 #include <sys/stat.h>
 #include <inttypes.h>

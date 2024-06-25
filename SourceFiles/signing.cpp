@@ -1,7 +1,7 @@
-#include "common/common.h"
-#include "common/json.h"
-#include "common/mach-o.h"
-#include "openssl.h"
+#include "../HeaderFiles/common.h"
+#include "../HeaderFiles/json.h"
+#include "../HeaderFiles/mach-o.h"
+#include "../HeaderFiles/openssl.h"
 
 static void _DERLength(string &strBlob, uint64_t uLength)
 {
