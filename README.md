@@ -85,3 +85,9 @@ and then:
 chmod +x ./build.sh
 sudo ./build.sh
 ```
+
+If you are running macOS on arm64 (Apple M-Series CPUs) you can compile a x86_64 binary for macOS by using putting `arch -x86_64` in front of the command that executes build.sh.
+
+```bash
+arch -x86_64 sudo ./build.sh
+```
