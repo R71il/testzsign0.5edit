@@ -1,6 +1,5 @@
 # zsign
 #### cross-platform codesigning utility to sign .ipa or .app bundles, can also inject dyllibs into apps :)
-Modified version of zsign, originally created by zhlynn.
 
 ## How to build
 Follow the given instructions to compile it for your target OS.
@@ -161,8 +160,10 @@ options:
 
 ## Credits
 
-#### Original Codebase
-* **zsign** @zhlynn https://github.com/zhlynn/zsign
+#### Original Codebase: https://github.com/zhlynn/zsign
+Copyright (c) 2021, zhlynn
+All rights reserved.
+@zhlynn https://github.com/zhlynn/zsign
 
 #### PRs
 
