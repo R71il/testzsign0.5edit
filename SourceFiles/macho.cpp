@@ -4,6 +4,9 @@
 #include "../HeaderFiles/openssl.h"
 #include "../HeaderFiles/signing.h"
 #include "../HeaderFiles/macho.h"
+#include <unistd.h>
+#include <sys/mman.h>
+
 
 ZMachO::ZMachO()
 {
