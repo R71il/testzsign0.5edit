@@ -4,6 +4,10 @@
 #include <sys/stat.h>
 #include <inttypes.h>
 #include <openssl/sha.h>
+#include <fcntl.h>
+#include <unistd.h>
+#include <sys/mman.h>
+
 
 #define PARSEVALIST(szFormatArgs, szArgs)                       \
 	ZBuffer buffer;                                             \
