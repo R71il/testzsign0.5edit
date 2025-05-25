@@ -29,6 +29,7 @@ const struct option options[] = {
 	{"install", no_argument, NULL, 'i'},
 	{"quiet", no_argument, NULL, 'q'},
 	{"help", no_argument, NULL, 'h'},
+{"deletemobile", no_argument, NULL, 'x'}, // 'x' هو الحرف المميز للخيار (اختر حرفًا غير مستخدم)
 	{}};
 
 int usage()
@@ -53,6 +54,7 @@ int usage()
 	ZLog::Print("-q, --quiet\t\tQuiet operation.\n");
 	ZLog::Print("-v, --version\t\tShows version.\n");
 	ZLog::Print("-h, --help\t\tShows help (this message).\n");
+	ZLog::Print("-x, --deletemobile\t\tDelete embedded.mobileprovision after signing\n");
 
 	return -1;
 }
@@ -60,7 +62,8 @@ int usage()
 int main(int argc, char *argv[])
 {
 	ZTimer gtimer;
-
+	
+        bool bDeleteMobile = false;
 	bool bForce = false;
 	bool bInstall = false;
 	bool bWeakInject = false;
@@ -89,7 +92,7 @@ int main(int argc, char *argv[])
         zsignTmpPath = "/tmp/";
 #endif
 
-	while (-1 != (opt = getopt_long(argc, argv, "dfvhc:k:m:o:ip:e:b:n:z:ql:w", options, &argslot)))
+while (-1 != (opt = getopt_long(argc, argv, "dfvhc:k:m:o:ip:e:b:n:z:ql:wx", options, &argslot)))
 	{
 		switch (opt)
 		{
@@ -143,10 +146,13 @@ int main(int argc, char *argv[])
 			break;
 		case 'v':
 		{
-			printf("version: 0.5\n");
+			printf("version: 0.5by7md\n");
 			return 0;
 		}
 		break;
+		case 'x':
+                        bDeleteMobile = true;
+                        break;
 		case 'h':
 		case '?':
 			return usage();
@@ -260,7 +266,14 @@ int main(int argc, char *argv[])
 	{
 		StringFormat(strOutputFile, "%szsign_temp_%llu.ipa", GetMicroSecond(), zsignTmpPath.c_str());
 	}
-
+	
+        if (bRet && bDeleteMobile) {
+    string strProvPath = bundle.m_strAppFolder + "/embedded.mobileprovision";
+    if (IsFileExists(strProvPath.c_str())) {
+        RemoveFile(strProvPath.c_str());
+        ZLog::Print(">>> تم حذف embedded.mobileprovision قبل إنشاء الـ IPA!\n");
+    }
+}
 	if (!strOutputFile.empty())
 	{
 		timer.Reset();
