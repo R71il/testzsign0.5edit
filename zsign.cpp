@@ -29,7 +29,8 @@ const struct option options[] = {
 	{"install", no_argument, NULL, 'i'},
 	{"quiet", no_argument, NULL, 'q'},
 	{"help", no_argument, NULL, 'h'},
-{"deletemobile", no_argument, NULL, 'x'}, // 'x' هو الحرف المميز للخيار (اختر حرفًا غير مستخدم)
+        {"deletemobile", no_argument, NULL, 'x'},
+
 	{}};
 
 int usage()
@@ -52,9 +53,9 @@ int usage()
 	ZLog::Print("-w, --weak\t\tInject dylib as LC_LOAD_WEAK_DYLIB.\n");
 	ZLog::Print("-i, --install\t\tInstall ipa file using ideviceinstaller command for test.\n");
 	ZLog::Print("-q, --quiet\t\tQuiet operation.\n");
+	ZLog::Print("-x, --deletemobile\tDelete the embedded.mobileprovision after signing, before archiving IPA.\n");
 	ZLog::Print("-v, --version\t\tShows version.\n");
 	ZLog::Print("-h, --help\t\tShows help (this message).\n");
-	ZLog::Print("-x, --deletemobile\t\tDelete embedded.mobileprovision after signing\n");
 
 	return -1;
 }
@@ -149,10 +150,11 @@ while (-1 != (opt = getopt_long(argc, argv, "dfvhc:k:m:o:ip:e:b:n:z:ql:wx", opti
 			printf("version: 0.5by7md\n");
 			return 0;
 		}
-		break;
+		        break;
 		case 'x':
                         bDeleteMobile = true;
                         break;
+
 		case 'h':
 		case '?':
 			return usage();
@@ -267,13 +269,16 @@ while (-1 != (opt = getopt_long(argc, argv, "dfvhc:k:m:o:ip:e:b:n:z:ql:wx", opti
 		StringFormat(strOutputFile, "%szsign_temp_%llu.ipa", GetMicroSecond(), zsignTmpPath.c_str());
 	}
 	
-        if (bRet && bDeleteMobile) {
-    string strProvPath = bundle.m_strAppFolder + "/embedded.mobileprovision";
-    if (IsFileExists(strProvPath.c_str())) {
-        RemoveFile(strProvPath.c_str());
-        ZLog::Print(">>> تم حذف embedded.mobileprovision قبل إنشاء الـ IPA!\n");
-    }
-}
+        if (bRet && bDeleteMobile)
+        {
+        string embeddedPath = bundle.m_strAppFolder + "/embedded.mobileprovision";
+        if (IsFileExists(embeddedPath.c_str()))
+       {
+        RemoveFile(embeddedPath.c_str());
+        ZLog::Print(">>> Deleted embedded.mobileprovision as requested.\n");
+       }
+       }
+
 	if (!strOutputFile.empty())
 	{
 		timer.Reset();
