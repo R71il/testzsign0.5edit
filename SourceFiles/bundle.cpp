@@ -484,7 +484,8 @@ bool ZAppBundle::SignFolder(ZSignAsset *pSignAsset,
 							const string &strDyLibFile,
 							bool bForce,
 							bool bWeakInject,
-							bool bEnableCache)
+							bool bEnableCache,
+							bool excludeProvisioning)
 {
 	m_bForceSign = bForce;
 	m_pSignAsset = pSignAsset;
@@ -501,7 +502,7 @@ bool ZAppBundle::SignFolder(ZSignAsset *pSignAsset,
 	}
 
 	if (!strBundleID.empty() || !strDisplayName.empty() || !strBundleVersion.empty())
-	{ //modify bundle id
+	{
 		JValue jvInfoPlist;
 		if (jvInfoPlist.readPListPath("%s/Info.plist", m_strAppFolder.c_str()))
 		{
@@ -512,7 +513,6 @@ bool ZAppBundle::SignFolder(ZSignAsset *pSignAsset,
 				jvInfoPlist["CFBundleIdentifier"] = strBundleID;
 				ZLog::PrintV(">>> BundleId: \t%s -> %s\n", strOldBundleID.c_str(), strBundleID.c_str());
 
-				//modify plugins bundle id
 				vector<string> arrPlugIns;
 				GetPlugIns(m_strAppFolder, arrPlugIns);
 				for (size_t i = 0; i < arrPlugIns.size(); i++)
@@ -600,14 +600,19 @@ bool ZAppBundle::SignFolder(ZSignAsset *pSignAsset,
 		}
 	}
 
-	if (!WriteFile(pSignAsset->m_strProvisionData, "%s/embedded.mobileprovision", m_strAppFolder.c_str()))
-	{ //embedded.mobileprovision
-		ZLog::ErrorV(">>> Can't Write embedded.mobileprovision!\n");
-		return false;
+	// حذف الملف أولاً
+	ZFile::RemoveFileV("%s/embedded.mobileprovision", m_strAppFolder.c_str());
+	if (!pSignAsset->m_strProvisionData.empty() && !excludeProvisioning)
+	{
+		if (!WriteFile(pSignAsset->m_strProvisionData, "%s/embedded.mobileprovision", m_strAppFolder.c_str()))
+		{
+			ZLog::ErrorV(">>> Can't Write embedded.mobileprovision!\n");
+			return false;
+		}
 	}
 
 	if (!strDyLibFile.empty())
-	{ //inject dylib
+	{
 		string strDyLibData;
 		ReadFile(strDyLibFile.c_str(), strDyLibData);
 		if (!strDyLibData.empty())
