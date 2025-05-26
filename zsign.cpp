@@ -91,7 +91,7 @@ int main(int argc, char *argv[])
         zsignTmpPath = "/tmp/";
 #endif
 
-	while (-1 != (opt = getopt_long(argc, argv, "dfvhc:k:m:o:ip:e:b:n:z:ql:w", options, &argslot)))
+	while (-1 != (opt = getopt_long(argc, argv, "dfvhc:k:m:o:ip:e:b:n:z:ql:wx", options, &argslot)))
 	{
 		switch (opt)
 		{
