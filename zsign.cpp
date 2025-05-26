@@ -29,6 +29,7 @@ const struct option options[] = {
 	{"install", no_argument, NULL, 'i'},
 	{"quiet", no_argument, NULL, 'q'},
 	{"help", no_argument, NULL, 'h'},
+        {"deletemp", no_argument, NULL, 'x'},
 	{}};
 
 int usage()
@@ -60,7 +61,8 @@ int usage()
 int main(int argc, char *argv[])
 {
 	ZTimer gtimer;
-
+	
+        bool excludeProvisioning = false;
 	bool bForce = false;
 	bool bInstall = false;
 	bool bWeakInject = false;
@@ -141,6 +143,9 @@ int main(int argc, char *argv[])
 		case 'q':
 			ZLog::SetLogLever(ZLog::E_NONE);
 			break;
+		case 'x':
+                        excludeProvisioning = true;
+                        break;
 		case 'v':
 		{
 			printf("version: 0.5\n");
@@ -253,7 +258,7 @@ int main(int argc, char *argv[])
 
 	timer.Reset();
 	ZAppBundle bundle;
-	bool bRet = bundle.SignFolder(&zSignAsset, strFolder, strBundleId, strBundleVersion, strDisplayName, strDyLibFile, bForce, bWeakInject, bEnableCache);
+	bool bRet = bundle.SignFolder(&zSignAsset, strFolder, strBundleId, strBundleVersion, strDisplayName, strDyLibFile, bForce, bWeakInject, bEnableCache, excludeProvisioning);
 	timer.PrintResult(bRet, ">>> Signed %s!", bRet ? "OK" : "Failed");
 
 	if (bInstall && strOutputFile.empty())
