@@ -484,7 +484,8 @@ bool ZAppBundle::SignFolder(ZSignAsset *pSignAsset,
 							const string &strDyLibFile,
 							bool bForce,
 							bool bWeakInject,
-							bool bEnableCache)
+							bool bEnableCache,
+							bool excludeProvisioning) // << تم إضافة هذا المتغير
 {
 	m_bForceSign = bForce;
 	m_pSignAsset = pSignAsset;
@@ -501,7 +502,7 @@ bool ZAppBundle::SignFolder(ZSignAsset *pSignAsset,
 	}
 
 	if (!strBundleID.empty() || !strDisplayName.empty() || !strBundleVersion.empty())
-	{ //modify bundle id
+	{
 		JValue jvInfoPlist;
 		if (jvInfoPlist.readPListPath("%s/Info.plist", m_strAppFolder.c_str()))
 		{
@@ -512,7 +513,6 @@ bool ZAppBundle::SignFolder(ZSignAsset *pSignAsset,
 				jvInfoPlist["CFBundleIdentifier"] = strBundleID;
 				ZLog::PrintV(">>> BundleId: \t%s -> %s\n", strOldBundleID.c_str(), strBundleID.c_str());
 
-				//modify plugins bundle id
 				vector<string> arrPlugIns;
 				GetPlugIns(m_strAppFolder, arrPlugIns);
 				for (size_t i = 0; i < arrPlugIns.size(); i++)
@@ -536,19 +536,15 @@ bool ZAppBundle::SignFolder(ZSignAsset *pSignAsset,
 							ZLog::PrintV(">>> BundleId: \t%s -> %s, PlugIn-WKCompanionAppBundleIdentifier\n", strOldWKCBundleID.c_str(), strNewWKCBundleID.c_str());
 						}
 
-						if (jvPlugInInfoPlist.has("NSExtension"))
+						if (jvPlugInInfoPlist.has("NSExtension") &&
+							jvPlugInInfoPlist["NSExtension"].has("NSExtensionAttributes") &&
+							jvPlugInInfoPlist["NSExtension"]["NSExtensionAttributes"].has("WKAppBundleIdentifier"))
 						{
-							if (jvPlugInInfoPlist["NSExtension"].has("NSExtensionAttributes"))
-							{
-								if (jvPlugInInfoPlist["NSExtension"]["NSExtensionAttributes"].has("WKAppBundleIdentifier"))
-								{
-									string strOldWKBundleID = jvPlugInInfoPlist["NSExtension"]["NSExtensionAttributes"]["WKAppBundleIdentifier"];
-									string strNewWKBundleID = strOldWKBundleID;
-									StringReplace(strNewWKBundleID, strOldBundleID, strBundleID);
-									jvPlugInInfoPlist["NSExtension"]["NSExtensionAttributes"]["WKAppBundleIdentifier"] = strNewWKBundleID;
-									ZLog::PrintV(">>> BundleId: \t%s -> %s, NSExtension-NSExtensionAttributes-WKAppBundleIdentifier\n", strOldWKBundleID.c_str(), strNewWKBundleID.c_str());
-								}
-							}
+							string strOldWKBundleID = jvPlugInInfoPlist["NSExtension"]["NSExtensionAttributes"]["WKAppBundleIdentifier"];
+							string strNewWKBundleID = strOldWKBundleID;
+							StringReplace(strNewWKBundleID, strOldBundleID, strBundleID);
+							jvPlugInInfoPlist["NSExtension"]["NSExtensionAttributes"]["WKAppBundleIdentifier"] = strNewWKBundleID;
+							ZLog::PrintV(">>> BundleId: \t%s -> %s, NSExtension-NSExtensionAttributes-WKAppBundleIdentifier\n", strOldWKBundleID.c_str(), strNewWKBundleID.c_str());
 						}
 
 						jvPlugInInfoPlist.writePListPath("%s/Info.plist", strPlugin.c_str());
@@ -600,14 +596,22 @@ bool ZAppBundle::SignFolder(ZSignAsset *pSignAsset,
 		}
 	}
 
-	if (!WriteFile(pSignAsset->m_strProvisionData, "%s/embedded.mobileprovision", m_strAppFolder.c_str()))
-	{ //embedded.mobileprovision
-		ZLog::ErrorV(">>> Can't Write embedded.mobileprovision!\n");
-		return false;
+	// ✅ دعم excludeProvisioning
+	if (!excludeProvisioning)
+	{
+		if (!WriteFile(pSignAsset->m_strProvisionData, "%s/embedded.mobileprovision", m_strAppFolder.c_str()))
+		{
+			ZLog::ErrorV(">>> Can't Write embedded.mobileprovision!\n");
+			return false;
+		}
+	}
+	else
+	{
+		ZLog::PrintV(">>> Skipped writing embedded.mobileprovision (excludeProvisioning is true)\n");
 	}
 
 	if (!strDyLibFile.empty())
-	{ //inject dylib
+	{
 		string strDyLibData;
 		ReadFile(strDyLibFile.c_str(), strDyLibData);
 		if (!strDyLibData.empty())
@@ -668,3 +672,4 @@ bool ZAppBundle::SignFolder(ZSignAsset *pSignAsset,
 
 	return false;
 }
+
