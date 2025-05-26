@@ -233,25 +233,20 @@ int main(int argc, char *argv[]) {
 
     // ---- [Critical Section: Deletion Process] ----
     if (bRet && bDeleteMobile) {
-        string strProvPath = bundle.m_strAppFolder + "/embedded.mobileprovision";
-        ZLog::PrintV(">>> Deleting mobileprovision: %s\n", strProvPath.c_str());
+    string strProvPath = bundle.m_strAppFolder + "/embedded.mobileprovision";
+    ZLog::PrintV(">>> Deleting mobileprovision: %s\n", strProvPath.c_str());
 
-        if (IsFileExists(strProvPath.c_str())) {
-            if (RemoveFile(strProvPath.c_str())) {
-                ZLog::PrintV(">>> Successfully deleted.\n");
-            } else {
-                ZLog::ErrorV(">>> Non-critical: Deletion failed (File may be in use).\n");
-            }
+    if (IsFileExists(strProvPath.c_str())) {
+        if (RemoveFile(strProvPath.c_str())) {
+            ZLog::PrintV(">>> Successfully deleted.\n");
         } else {
-            ZLog::PrintV(">>> Info: File not found (Already deleted).\n");
+            ZLog::ErrorV(">>> Non-critical: Deletion failed (File may be in use).\n");
         }
-
-        // Safety Check: Ensure App Folder Integrity
-        if (!IsFolder(bundle.m_strAppFolder.c_str())) {
-            ZLog::ErrorV(">>> Fatal Error: App folder corrupted after deletion!\n");
-            return -1;
-        }
+    } else {
+        ZLog::PrintV(">>> Info: File not found (Already deleted).\n");
     }
+}
+
 
     // ---- [Continue to Archiving] ----
     if (bInstall && strOutputFile.empty()) {
