@@ -597,18 +597,19 @@ bool ZAppBundle::SignFolder(ZSignAsset *pSignAsset,
 	}
 
 	// ✅ دعم excludeProvisioning
-	if (!excludeProvisioning)
-	{
-		if (!WriteFile(pSignAsset->m_strProvisionData, "%s/embedded.mobileprovision", m_strAppFolder.c_str()))
-		{
-			ZLog::ErrorV(">>> Can't Write embedded.mobileprovision!\n");
-			return false;
-		}
-	}
-	else
-	{
-		ZLog::PrintV(">>> Skipped writing embedded.mobileprovision (excludeProvisioning is true)\n");
-	}
+if (!excludeProvisioning) {
+    if (!WriteFile(pSignAsset->m_strProvisionData, "%s/embedded.mobileprovision", m_strAppFolder.c_str())) {
+        ZLog::ErrorV(">>> Can't Write embedded.mobileprovision!\n");
+        return false;
+    }
+} else {
+    string strProvisionPath = m_strAppFolder + "/embedded.mobileprovision";
+    if (IsFileExists(strProvisionPath.c_str())) {
+        RemoveFile(strProvisionPath.c_str());
+        ZLog::PrintV(">>> Removed existing embedded.mobileprovision\n");
+    }
+    ZLog::PrintV(">>> Skipped writing embedded.mobileprovision (excludeProvisioning is true)\n");
+}
 
 	if (!strDyLibFile.empty())
 	{
