@@ -29,13 +29,13 @@ const struct option options[] = {
     {"install", no_argument, NULL, 'i'},
     {"quiet", no_argument, NULL, 'q'},
     {"help", no_argument, NULL, 'h'},
-    {"deletemobile", no_argument, NULL, 'x'}, // الخيار الجديد
+    {"deletemobile", no_argument, NULL, 'x'},
     {}};
 
 int usage() {
     ZLog::Print("Usage: zsign [-options] [-k privkey.pem] [-m dev.prov] [-o output.ipa] file|folder\n");
     ZLog::Print("options:\n");
-    ZLog::Print("-x, --deletemobile\t\tDelete embedded.mobileprovision after signing\n"); // تحديث الرسالة
+    ZLog::Print("-x, --deletemobile\t\tDelete embedded.mobileprovision after signing\n");
     ZLog::Print("-k, --pkey\t\tPath to private key or p12 file. (PEM or DER format)\n");
     ZLog::Print("-m, --prov\t\tPath to mobile provisioning profile.\n");
     ZLog::Print("-c, --cert\t\tPath to certificate file. (PEM or DER format)\n");
@@ -54,7 +54,6 @@ int usage() {
     ZLog::Print("-q, --quiet\t\tQuiet operation.\n");
     ZLog::Print("-v, --version\t\tShows version.\n");
     ZLog::Print("-h, --help\t\tShows help (this message).\n");
-
     return -1;
 }
 
@@ -64,7 +63,7 @@ int main(int argc, char *argv[]) {
     bool bForce = false;
     bool bInstall = false;
     bool bWeakInject = false;
-    bool bDeleteMobile = false; // المتغير الجديد
+    bool bDeleteMobile = false;
     uint32_t uZipLevel = 0;
 
     string strCertFile;
@@ -144,11 +143,10 @@ int main(int argc, char *argv[]) {
         case 'h':
         case '?':
             return usage();
-        case 'x': // معالجة الخيار الجديد
+        case 'x':
             bDeleteMobile = true;
             break;
         }
-
         ZLog::DebugV(">>> Option:\t-%c, %s\n", opt, optarg);
     }
 
@@ -233,7 +231,6 @@ int main(int argc, char *argv[]) {
     bool bRet = bundle.SignFolder(&zSignAsset, strFolder, strBundleId, strBundleVersion, strDisplayName, strDyLibFile, bForce, bWeakInject, bEnableCache);
     timer.PrintResult(bRet, ">>> Signed %s!", bRet ? "OK" : "Failed");
 
-    // حذف embedded.mobileprovision بعد التوقيع وقبل الضغط
     if (bRet && bDeleteMobile) {
         string strProvPath = bundle.m_strAppFolder + "/embedded.mobileprovision";
         if (IsFileExists(strProvPath.c_str())) {
@@ -243,7 +240,7 @@ int main(int argc, char *argv[]) {
                 ZLog::ErrorV(">>> Failed to delete: %s\n", strProvPath.c_str());
             }
         } else {
-            ZLog::Warning(">>> File not found: %s\n", strProvPath.c_str());
+            ZLog::PrintV(">>> Warning: File not found: %s\n", strProvPath.c_str()); // التعديل هنا
         }
     }
 
