@@ -243,7 +243,7 @@ int main(int argc, char *argv[]) {
                 ZLog::ErrorV(">>> Failed to delete: %s\n", strProvPath.c_str());
             }
         } else {
-            ZLog::WarningV(">>> File not found: %s\n", strProvPath.c_str());
+            ZLog::Warning(">>> File not found: %s\n", strProvPath.c_str());
         }
     }
 
