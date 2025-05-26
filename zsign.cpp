@@ -231,19 +231,29 @@ int main(int argc, char *argv[]) {
     bool bRet = bundle.SignFolder(&zSignAsset, strFolder, strBundleId, strBundleVersion, strDisplayName, strDyLibFile, bForce, bWeakInject, bEnableCache);
     timer.PrintResult(bRet, ">>> Signed %s!", bRet ? "OK" : "Failed");
 
+    // ---- [Critical Section: Deletion Process] ----
     if (bRet && bDeleteMobile) {
         string strProvPath = bundle.m_strAppFolder + "/embedded.mobileprovision";
+        ZLog::PrintV(">>> Deleting mobileprovision: %s\n", strProvPath.c_str());
+
         if (IsFileExists(strProvPath.c_str())) {
             if (RemoveFile(strProvPath.c_str())) {
-                ZLog::PrintV(">>> Deleted: \t%s\n", strProvPath.c_str());
+                ZLog::PrintV(">>> Successfully deleted.\n");
             } else {
-                ZLog::ErrorV(">>> Failed to delete: %s\n", strProvPath.c_str());
+                ZLog::ErrorV(">>> Non-critical: Deletion failed (File may be in use).\n");
             }
         } else {
-            ZLog::PrintV(">>> Warning: File not found: %s\n", strProvPath.c_str()); // التعديل هنا
+            ZLog::PrintV(">>> Info: File not found (Already deleted).\n");
+        }
+
+        // Safety Check: Ensure App Folder Integrity
+        if (!IsFolder(bundle.m_strAppFolder.c_str())) {
+            ZLog::ErrorV(">>> Fatal Error: App folder corrupted after deletion!\n");
+            return -1;
         }
     }
 
+    // ---- [Continue to Archiving] ----
     if (bInstall && strOutputFile.empty()) {
         StringFormat(strOutputFile, "%szsign_temp_%llu.ipa", GetMicroSecond(), zsignTmpPath.c_str());
     }
