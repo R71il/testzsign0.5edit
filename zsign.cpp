@@ -237,7 +237,7 @@ int main(int argc, char *argv[])
 		inputFilePath = strPath.c_str();
 		outputDirPath = strFolder.c_str();
 
-		unzipcmd = "7z x \"" + inputFilePath + "\" -o\"" + outputDirPath + "/\" -y > NUL";
+		string unzipcmd = "unzip -o \"" + inputFilePath + "\" -d \"" + outputDirPath + "\"";
 
 		RemoveFolder(strFolder.c_str());
 
@@ -287,7 +287,7 @@ int main(int argc, char *argv[])
 				std::replace(strOutputFile.begin(), strOutputFile.end(), '\\', '/');
 				RemoveFile(strOutputFile.c_str());
 
-				string zipcmd = "7z a " + strOutputFile + " Payload";
+				string zipcmd = "zip -r \"" + strOutputFile + "\" Payload";
 				system(zipcmd.c_str());
 				chdir(szOldFolder);
 				if (!IsFileExists(strOutputFile.c_str()))
