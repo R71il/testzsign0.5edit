@@ -1,9 +1,7 @@
 cmake_minimum_required(VERSION 3.14)
 
 project(zsign)
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-
+set(CMAKE_CXX_STANDARD 11)
 
 # Dependencies
 # On macOS, search Homebrew for keg-only versions of OpenSSL because system provided /usr/lib/libssl.dylib cannot be linked
@@ -35,13 +33,6 @@ message("zlib libraries: ${ZLIB_LIBRARIES}")
 include_directories(${ZLIB_INCLUDE_DIR})
 list(APPEND LIB_LIST ${ZLIB_LIBRARIES})
 
-find_library(MINIZIP_LIB minizip)
-if (MINIZIP_LIB)
-    message(STATUS "Found minizip library: ${MINIZIP_LIB}")
-    list(APPEND LIB_LIST ${MINIZIP_LIB})
-else()
-    message(FATAL_ERROR "minizip library not found")
-endif()
 
 # Main sources
 
@@ -49,4 +40,3 @@ file(GLOB SRC ./SourceFiles/*.cpp ./**.cpp)
 
 add_executable(zsign ${SRC})
 target_link_libraries(zsign ${LIB_LIST})
-
