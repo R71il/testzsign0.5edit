@@ -35,6 +35,13 @@ message("zlib libraries: ${ZLIB_LIBRARIES}")
 include_directories(${ZLIB_INCLUDE_DIR})
 list(APPEND LIB_LIST ${ZLIB_LIBRARIES})
 
+find_library(MINIZIP_LIB minizip)
+if (MINIZIP_LIB)
+    message(STATUS "Found minizip library: ${MINIZIP_LIB}")
+    list(APPEND LIB_LIST ${MINIZIP_LIB})
+else()
+    message(FATAL_ERROR "minizip library not found")
+endif()
 
 # Main sources
 
