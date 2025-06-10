@@ -97,6 +97,32 @@ bool zipFolder(const std::string& folderPath, const std::string& zipPath, int co
     zipClose(zf, NULL);
     return true;
 }
+int usage() {
+    printf(
+        "Usage: zsign [options] <input>\n"
+        "Options:\n"
+        "  -d, --debug           Enable debug logs\n"
+        "  -f, --force           Force overwrite\n"
+        "  -v, --verbose         Show version info\n"
+        "  -c, --cert FILE       Certificate file\n"
+        "  -k, --pkey FILE       Private key file\n"
+        "  -m, --prov FILE       Provisioning profile file\n"
+        "  -p, --password PASS   Password for private key\n"
+        "  -b, --bundle_id ID    Bundle identifier\n"
+        "  -r, --bundle_version VER Bundle version\n"
+        "  -n, --bundle_name NAME Bundle display name\n"
+        "  -e, --entitlements FILE Entitlements file\n"
+        "  -l, --dylib FILE      Dynamic library to inject\n"
+        "  -w, --weak            Use weak dylib injection\n"
+        "  -i, --install         Install after signing\n"
+        "  -o, --output FILE     Output file\n"
+        "  -z, --zip_level N     Zip compression level (0-9)\n"
+        "  -q, --quiet           Quiet mode\n"
+        "  -x, --deletemp       Delete temp files\n"
+        "  -h, --help            Show this help message\n"
+    );
+    return 0;
+}
 
 int main(int argc, char *argv[]) {
     ZTimer gtimer;
